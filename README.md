@@ -113,7 +113,7 @@ timer.start()
 If you give a link, the source is downloaded to the target directory through git clone or wget.
 
 #### How it works
-1. Try git clone.
+1. Try git clone. If you want to clone private repository, must set github token for 'g' parameter.
 2. If git clone fails, download it with wget and extract the compressed file.
 3. After extracting the compressed file, delete the compressed file.
 
@@ -124,10 +124,11 @@ If you give a link, the source is downloaded to the target directory through git
 | s | String | Link to download. | 
 | t | String | Path to download and extract. |
 | d | String | Path to save a log file. | 
+| g | String | Github Personal access token. |
 
 #### How to run
 ```
-$ fosslight_download  -s "https://github.com/LGE-OSS/example" -t target_dir/
+$ fosslight_download -s "https://github.com/LGE-OSS/example" -t target_dir/
 ```
 
 ## 👏 How to report issue
