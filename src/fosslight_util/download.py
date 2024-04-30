@@ -61,13 +61,21 @@ def change_src_link_to_https(src_link):
     return src_link
 
 
+def change_ssh_link_to_https(src_link):
+    src_link = src_link.replace("git@github.com:", "https://github.com/")
+    return src_link
+
+
 def parse_src_link(src_link):
     src_info = {"url": src_link}
     src_link_changed = ""
-    if src_link.startswith("git://") or src_link.startswith("https://") or src_link.startswith("http://"):
+    if src_link.startswith("git://") or src_link.startswith("git@") \
+            or src_link.startswith("https://") or src_link.startswith("http://"):
         src_link_split = src_link.split(';')
         if src_link.startswith("git://github.com/"):
             src_link_changed = change_src_link_to_https(src_link_split[0])
+        elif src_link.startswith("git@github.com:"):
+            src_link_changed = change_ssh_link_to_https(src_link_split[0])
         else:
             if "rubygems.org" in src_link:
                 src_info["rubygems"] = True
@@ -209,13 +217,9 @@ def get_github_ossname(link):
     return oss_name
 
 
-def get_github_username(git_url):
-    user_name = get_github_ossname(git_url).split('-')[0]
-    if user_name == "":
-        p = re.compile(r'git@github\.com:([^\/]+)\/([^\/]+)\.git')
-        match = p.match(git_url)
-        if match:
-            user_name = match.group(1)
+def get_git_config_username():
+    git_global_config = git.Config.get_global_config()
+    user_name = git_global_config['user.name']
     return user_name
 
 
@@ -226,7 +230,7 @@ def download_git_clone(git_url, target_dir, checkout_to="", tag="", branch="", g
     oss_version = ""
     callbacks = None
     if git_token != "":
-        user_name = get_github_username(git_url)
+        user_name = get_git_config_username()
         callbacks = git.RemoteCallbacks(credentials=git.UserPass(user_name, git_token))
 
     if platform.system() != "Windows":

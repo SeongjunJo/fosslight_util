@@ -6,9 +6,10 @@ from fosslight_util.download import cli_download_and_extract
 
 
 def main():
-    success, msg, _, _ = cli_download_and_extract("https://github.com/LGE-OSS/example",
+    success, msg, _, _ = cli_download_and_extract("https://github.com/SeongjunJo/Snulife-Internal.git",
                                                   "test_result/download/example",
-                                                  "test_result/download_log/example")
+                                                  "test_result/download_log/example",
+                                                  git_token="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")
     if not success:
         raise Exception(f"Download failed with git:{msg}")
     success, msg, _, _ = cli_download_and_extract("https://pypi.org/project/filelock/3.4.1",
